@@ -1,4 +1,7 @@
+import 'dart:convert';
+
 import 'package:http/http.dart' as http;
+import 'package:weatherappg13/models/weather_model.dart';
 
 class ApiServices {
   Future<void> getWeatherInfo() async {
@@ -17,15 +20,19 @@ class ApiServices {
     }
   }
 
-  Future<void> getWeatherInfoByPos(double lat, double long) async {
+  Future<WeatherModel?> getWeatherInfoByPos(double lat, double long) async {
     final url = Uri.parse(
       "http://api.weatherapi.com/v1/current.json?key=70866d7ade244a3c9ca20142230509&q=$lat,$long&aqi=no",
     );
     try {
       final response = await http.get(url);
       if (response.statusCode == 200) {
-        final data = response.body;
-        print(data);
+        final data = json.decode(response.body);
+        WeatherModel weatherModel = WeatherModel.fromJson(data);
+        // print(data);
+        print(weatherModel);
+        print(weatherModel.location.name);
+        return weatherModel;
       }
     } catch (e) {
       print(e);

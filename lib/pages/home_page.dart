@@ -1,14 +1,23 @@
 import 'package:flutter/material.dart';
+import 'package:weatherappg13/models/weather_model.dart';
 import 'package:weatherappg13/services/api_services.dart';
 import 'package:weatherappg13/widgets/search_city_widget.dart';
 import 'package:weatherappg13/widgets/weather_item.dart';
 import 'package:geolocator/geolocator.dart';
 
-class HomePage extends StatelessWidget {
+class HomePage extends StatefulWidget {
   HomePage({super.key});
 
+  @override
+  State<HomePage> createState() => _HomePageState();
+}
+
+class _HomePageState extends State<HomePage> {
   TextEditingController cityController = TextEditingController();
+
   final formKey = GlobalKey<FormState>();
+
+  WeatherModel? _weatherModel;
 
   Future<Position?> getPosition() async {
     bool serviceEnabled;
@@ -54,7 +63,18 @@ class HomePage extends StatelessWidget {
       return;
     }
 
-    ApiServices().getWeatherInfoByPos(_pos.latitude, _pos.longitude);
+    _weatherModel = await ApiServices().getWeatherInfoByPos(
+      _pos.latitude,
+      _pos.longitude,
+    );
+    setState(() {});
+  }
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    getWeatherFromPosition();
   }
 
   @override
@@ -81,52 +101,69 @@ class HomePage extends StatelessWidget {
         ],
       ),
       backgroundColor: Color(0xff2C2F31),
-      body: Form(
-        key: formKey,
-        child: Padding(
-          padding: const EdgeInsets.all(16.0),
-          child: Column(
-            children: [
-              SearchCityWidget(controller: cityController),
-              Container(
-                margin: EdgeInsets.symmetric(vertical: 16),
-                padding: EdgeInsets.symmetric(vertical: 32),
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(25),
-                  color: Colors.blueAccent,
-                ),
+      body: _weatherModel == null
+          ? Center(child: CircularProgressIndicator())
+          : Form(
+              key: formKey,
+              child: Padding(
+                padding: const EdgeInsets.all(16.0),
                 child: Column(
                   children: [
-                    Text(
-                      "Lima, Perú",
-                      style: TextStyle(color: Colors.white, fontSize: 18),
-                    ),
-                    SizedBox(height: 32),
-                    Image.asset("assets/icons/heavycloudy.png", height: 100),
-                    Text(
-                      "23.9°",
-                      style: TextStyle(color: Colors.white, fontSize: 100),
-                    ),
-                    Divider(),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                      children: [
-                        WeatherItem(
-                          value: 18,
-                          unit: "km/h",
-                          image: "windspeed",
-                        ),
-                        WeatherItem(value: 76, unit: "%", image: "humidity"),
-                        WeatherItem(value: 58, unit: "%", image: "cloud"),
-                      ],
+                    SearchCityWidget(controller: cityController),
+                    Container(
+                      margin: EdgeInsets.symmetric(vertical: 16),
+                      padding: EdgeInsets.symmetric(vertical: 32),
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(25),
+                        color: Colors.blueAccent,
+                      ),
+                      child: Column(
+                        children: [
+                          Text(
+                            "${_weatherModel!.location.name}, ${_weatherModel!.location.country}",
+                            style: TextStyle(color: Colors.white, fontSize: 18),
+                          ),
+                          SizedBox(height: 32),
+                          Image.asset(
+                            "assets/icons/heavycloudy.png",
+                            height: 100,
+                          ),
+                          Text(
+                            "${_weatherModel!.current.tempC}°",
+                            style: TextStyle(
+                              color: Colors.white,
+                              fontSize: 100,
+                            ),
+                          ),
+                          Divider(),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                            children: [
+                              WeatherItem(
+                                value: _weatherModel!.current.windKph,
+                                unit: "km/h",
+                                image: "windspeed",
+                              ),
+                              WeatherItem(
+                                value: _weatherModel!.current.humidity
+                                    .toDouble(),
+                                unit: "%",
+                                image: "humidity",
+                              ),
+                              WeatherItem(
+                                value: _weatherModel!.current.cloud.toDouble(),
+                                unit: "%",
+                                image: "cloud",
+                              ),
+                            ],
+                          ),
+                        ],
+                      ),
                     ),
                   ],
                 ),
               ),
-            ],
-          ),
-        ),
-      ),
+            ),
     );
   }
 }
