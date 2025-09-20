@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:weatherappg13/models/weather_model.dart';
 import 'package:weatherappg13/services/api_services.dart';
+import 'package:weatherappg13/services/user_api_services.dart';
 import 'package:weatherappg13/widgets/search_city_widget.dart';
 import 'package:weatherappg13/widgets/weather_item.dart';
 import 'package:geolocator/geolocator.dart';
@@ -85,7 +86,9 @@ class _HomePageState extends State<HomePage> {
           // getPosition();
           // ApiServices apiServices = ApiServices();
           // apiServices.getWeatherInfo();
-          getWeatherFromPosition();
+          // getWeatherFromPosition();
+          UserApiServices userApiServices = UserApiServices();
+          userApiServices.getUsers();
         },
       ),
       appBar: AppBar(
