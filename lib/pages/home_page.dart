@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:weatherappg13/services/api_services.dart';
 import 'package:weatherappg13/widgets/search_city_widget.dart';
 import 'package:weatherappg13/widgets/weather_item.dart';
 import 'package:geolocator/geolocator.dart';
@@ -51,7 +52,9 @@ class HomePage extends StatelessWidget {
     return Scaffold(
       floatingActionButton: FloatingActionButton(
         onPressed: () {
-          getPosition();
+          // getPosition();
+          ApiServices apiServices = ApiServices();
+          apiServices.getWeatherInfo();
         },
       ),
       appBar: AppBar(
