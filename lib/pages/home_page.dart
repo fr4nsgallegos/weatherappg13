@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:weatherappg13/widgets/search_city_widget.dart';
+import 'package:weatherappg13/widgets/weather_item.dart';
 
 class HomePage extends StatelessWidget {
   HomePage({super.key});
@@ -29,18 +30,38 @@ class HomePage extends StatelessWidget {
           child: Column(
             children: [
               SearchCityWidget(controller: cityController),
-
               Container(
                 margin: EdgeInsets.symmetric(vertical: 16),
-                padding: EdgeInsets.all(16),
+                padding: EdgeInsets.symmetric(vertical: 32),
                 decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(25),
                   color: Colors.blueAccent,
                 ),
                 child: Column(
                   children: [
-                    Text("Lima, Perú", style: TextStyle(color: Colors.white)),
-                    Image.asset("assets/icons/heavycloudy.png"),
+                    Text(
+                      "Lima, Perú",
+                      style: TextStyle(color: Colors.white, fontSize: 18),
+                    ),
+                    SizedBox(height: 32),
+                    Image.asset("assets/icons/heavycloudy.png", height: 100),
+                    Text(
+                      "23.9°",
+                      style: TextStyle(color: Colors.white, fontSize: 100),
+                    ),
+                    Divider(),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                      children: [
+                        WeatherItem(
+                          value: 18,
+                          unit: "km/h",
+                          image: "windspeed",
+                        ),
+                        WeatherItem(value: 76, unit: "%", image: "humidity"),
+                        WeatherItem(value: 58, unit: "%", image: "cloud"),
+                      ],
+                    ),
                   ],
                 ),
               ),
