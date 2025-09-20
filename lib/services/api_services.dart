@@ -38,4 +38,23 @@ class ApiServices {
       print(e);
     }
   }
+
+  Future<WeatherModel?> getWeatherInfoByName(String city) async {
+    final url = Uri.parse(
+      "http://api.weatherapi.com/v1/current.json?key=70866d7ade244a3c9ca20142230509&q=$city&aqi=no",
+    );
+    try {
+      final response = await http.get(url);
+      if (response.statusCode == 200) {
+        final data = json.decode(response.body);
+        WeatherModel weatherModel = WeatherModel.fromJson(data);
+        // print(data);
+        print(weatherModel);
+        print(weatherModel.location.name);
+        return weatherModel;
+      }
+    } catch (e) {
+      print(e);
+    }
+  }
 }

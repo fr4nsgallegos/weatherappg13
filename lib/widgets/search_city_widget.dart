@@ -2,8 +2,12 @@ import 'package:flutter/material.dart';
 
 class SearchCityWidget extends StatelessWidget {
   TextEditingController controller;
-
-  SearchCityWidget({super.key, required this.controller});
+  VoidCallback function;
+  SearchCityWidget({
+    super.key,
+    required this.controller,
+    required this.function,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -14,6 +18,10 @@ class SearchCityWidget extends StatelessWidget {
         hintText: "Ingresa la ciudad",
         hintStyle: TextStyle(color: Colors.grey.shade700),
         filled: true,
+        suffixIcon: IconButton(
+          onPressed: function,
+          icon: Icon(Icons.search_rounded, color: Colors.white),
+        ),
         fillColor: Colors.white.withOpacity(0.06),
         border: OutlineInputBorder(
           borderRadius: BorderRadius.circular(16),

@@ -107,60 +107,78 @@ class _HomePageState extends State<HomePage> {
               key: formKey,
               child: Padding(
                 padding: const EdgeInsets.all(16.0),
-                child: Column(
-                  children: [
-                    SearchCityWidget(controller: cityController),
-                    Container(
-                      margin: EdgeInsets.symmetric(vertical: 16),
-                      padding: EdgeInsets.symmetric(vertical: 32),
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(25),
-                        color: Colors.blueAccent,
+                child: SingleChildScrollView(
+                  child: Column(
+                    children: [
+                      SearchCityWidget(
+                        controller: cityController,
+                        function: () async {
+                          if (formKey.currentState!.validate()) ;
+                          {
+                            _weatherModel = await ApiServices()
+                                .getWeatherInfoByName(cityController.text);
+                            FocusScope.of(context).unfocus();
+                            cityController.clear();
+                            setState(() {});
+                          }
+                        },
                       ),
-                      child: Column(
-                        children: [
-                          Text(
-                            "${_weatherModel!.location.name}, ${_weatherModel!.location.country}",
-                            style: TextStyle(color: Colors.white, fontSize: 18),
-                          ),
-                          SizedBox(height: 32),
-                          Image.asset(
-                            "assets/icons/heavycloudy.png",
-                            height: 100,
-                          ),
-                          Text(
-                            "${_weatherModel!.current.tempC}°",
-                            style: TextStyle(
-                              color: Colors.white,
-                              fontSize: 100,
+                      Container(
+                        margin: EdgeInsets.symmetric(vertical: 16),
+                        padding: EdgeInsets.symmetric(vertical: 32),
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(25),
+                          color: Colors.blueAccent,
+                        ),
+                        child: Column(
+                          children: [
+                            Text(
+                              "${_weatherModel!.location.name}, ${_weatherModel!.location.country}",
+                              style: TextStyle(
+                                color: Colors.white,
+                                fontSize: 18,
+                              ),
                             ),
-                          ),
-                          Divider(),
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                            children: [
-                              WeatherItem(
-                                value: _weatherModel!.current.windKph,
-                                unit: "km/h",
-                                image: "windspeed",
+                            SizedBox(height: 32),
+                            Image.asset(
+                              "assets/icons/heavycloudy.png",
+                              height: 100,
+                            ),
+                            Text(
+                              "${_weatherModel!.current.tempC}°",
+                              style: TextStyle(
+                                color: Colors.white,
+                                fontSize: 100,
                               ),
-                              WeatherItem(
-                                value: _weatherModel!.current.humidity
-                                    .toDouble(),
-                                unit: "%",
-                                image: "humidity",
-                              ),
-                              WeatherItem(
-                                value: _weatherModel!.current.cloud.toDouble(),
-                                unit: "%",
-                                image: "cloud",
-                              ),
-                            ],
-                          ),
-                        ],
+                            ),
+                            Divider(),
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                              children: [
+                                WeatherItem(
+                                  value: _weatherModel!.current.windKph,
+                                  unit: "km/h",
+                                  image: "windspeed",
+                                ),
+                                WeatherItem(
+                                  value: _weatherModel!.current.humidity
+                                      .toDouble(),
+                                  unit: "%",
+                                  image: "humidity",
+                                ),
+                                WeatherItem(
+                                  value: _weatherModel!.current.cloud
+                                      .toDouble(),
+                                  unit: "%",
+                                  image: "cloud",
+                                ),
+                              ],
+                            ),
+                          ],
+                        ),
                       ),
-                    ),
-                  ],
+                    ],
+                  ),
                 ),
               ),
             ),
