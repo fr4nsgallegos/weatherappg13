@@ -47,14 +47,25 @@ class HomePage extends StatelessWidget {
     }
   }
 
+  Future<void> getWeatherFromPosition() async {
+    Position? _pos = await getPosition();
+    if (_pos == null) {
+      print("No se pudo obtener la ubicación");
+      return;
+    }
+
+    ApiServices().getWeatherInfoByPos(_pos.latitude, _pos.longitude);
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       floatingActionButton: FloatingActionButton(
         onPressed: () {
           // getPosition();
-          ApiServices apiServices = ApiServices();
-          apiServices.getWeatherInfo();
+          // ApiServices apiServices = ApiServices();
+          // apiServices.getWeatherInfo();
+          getWeatherFromPosition();
         },
       ),
       appBar: AppBar(
