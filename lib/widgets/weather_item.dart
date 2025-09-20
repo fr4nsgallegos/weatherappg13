@@ -17,7 +17,10 @@ class WeatherItem extends StatelessWidget {
       children: [
         Image.asset("assets/icons/$image.png", height: 50),
         SizedBox(height: 8),
-        Text("$value $unit", style: TextStyle(color: Colors.white)),
+        Text(
+          "${value.toStringAsFixed(0)} $unit",
+          style: TextStyle(color: Colors.white),
+        ),
       ],
     );
   }

@@ -1,15 +1,59 @@
 import 'package:flutter/material.dart';
 import 'package:weatherappg13/widgets/search_city_widget.dart';
 import 'package:weatherappg13/widgets/weather_item.dart';
+import 'package:geolocator/geolocator.dart';
 
 class HomePage extends StatelessWidget {
   HomePage({super.key});
 
   TextEditingController cityController = TextEditingController();
   final formKey = GlobalKey<FormState>();
+
+  Future<Position?> getPosition() async {
+    bool serviceEnabled;
+    LocationPermission locationPermission;
+
+    // VERIFICAMOS QUE EL SERVICIO ESTE HABILITADO
+    serviceEnabled = await Geolocator.isLocationServiceEnabled();
+
+    if (!serviceEnabled) {
+      print("Los servicios de ubicación estan deshabilitados");
+      return null;
+    }
+
+    // Verificando los permisos
+    locationPermission = await Geolocator.checkPermission();
+    if (locationPermission == LocationPermission.denied) {
+      locationPermission = await Geolocator.requestPermission();
+      if (locationPermission == LocationPermission.denied) {
+        print("Permiso de ubicación denegado");
+        return null;
+      }
+    }
+    if (locationPermission == LocationPermission.deniedForever) {
+      print("Los permisos de ubicación estan permanentemente denegados");
+      return null;
+    }
+
+    // OBTENER LA UBICACIÓN DEL DISPOSITIVO
+    try {
+      Position position = await Geolocator.getCurrentPosition();
+      print("Posicion: $position");
+      return position;
+    } catch (e) {
+      print("Error al obtener ubicación: $e");
+      return null;
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      floatingActionButton: FloatingActionButton(
+        onPressed: () {
+          getPosition();
+        },
+      ),
       appBar: AppBar(
         titleTextStyle: TextStyle(color: Colors.white, fontSize: 22),
         title: Text("WeatherApp"),
