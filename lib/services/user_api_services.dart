@@ -49,4 +49,12 @@ class UserApiServices {
       print("errorrrr: $e");
     }
   }
+
+  // DELETE
+  Future<void> deleteUser(String id) async {
+    final response = await http.delete(Uri.parse("$baseUrl/users/$id"));
+    if (response.statusCode != 200) {
+      throw Exception("ERROR AL ELIMINAR POST");
+    }
+  }
 }

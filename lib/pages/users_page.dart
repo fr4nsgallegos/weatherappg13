@@ -63,7 +63,11 @@ class _UsersPageState extends State<UsersPage> {
                       icon: Icon(Icons.edit, color: Colors.blueAccent),
                     ),
                     IconButton(
-                      onPressed: () {},
+                      onPressed: () async {
+                        userApiServices.deleteUser(usersList[index].id!);
+                        getUsers();
+                        setState(() {});
+                      },
                       icon: Icon(
                         Icons.cancel_outlined,
                         color: Colors.redAccent,
