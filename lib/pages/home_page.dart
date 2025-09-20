@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:weatherappg13/models/user_model.dart';
 import 'package:weatherappg13/models/weather_model.dart';
 import 'package:weatherappg13/services/api_services.dart';
 import 'package:weatherappg13/services/user_api_services.dart';
@@ -88,7 +89,15 @@ class _HomePageState extends State<HomePage> {
           // apiServices.getWeatherInfo();
           // getWeatherFromPosition();
           UserApiServices userApiServices = UserApiServices();
-          userApiServices.getUsers();
+          // userApiServices.getUsers();
+          userApiServices.createUser(
+            UserModel(
+              createdAt: DateTime.now(),
+              name: "Elias Grande ",
+              avatar:
+                  "https://images.pexels.com/photos/1043474/pexels-photo-1043474.jpeg",
+            ),
+          );
         },
       ),
       appBar: AppBar(

@@ -17,4 +17,19 @@ class UserApiServices {
       throw Exception("Error al cargar los usuarios");
     }
   }
+
+  // POST
+  Future<UserModel> createUser(UserModel user) async {
+    final response = await http.post(
+      Uri.parse("$baseUrl/users"),
+      body: jsonEncode(user.toJson()),
+      headers: {"Content-Type": "application/json"},
+    );
+    if (response.statusCode == 201) {
+      print(response.body);
+      return UserModel.fromJson(jsonDecode(response.body));
+    } else {
+      throw Exception("Error al crear Usuario");
+    }
+  }
 }
