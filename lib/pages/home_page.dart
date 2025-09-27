@@ -4,6 +4,7 @@ import 'package:weatherappg13/models/user_model.dart';
 import 'package:weatherappg13/models/weather_model.dart';
 import 'package:weatherappg13/services/api_services.dart';
 import 'package:weatherappg13/services/user_api_services.dart';
+import 'package:weatherappg13/widgets/forecast_widget.dart';
 import 'package:weatherappg13/widgets/search_city_widget.dart';
 import 'package:weatherappg13/widgets/weather_item.dart';
 import 'package:geolocator/geolocator.dart';
@@ -204,6 +205,34 @@ class _HomePageState extends State<HomePage> {
                               ],
                             ),
                           ],
+                        ),
+                      ),
+                      SingleChildScrollView(
+                        scrollDirection: Axis.horizontal,
+                        child: Row(
+                          children: List.generate(
+                            _forecastModel!.forecast.forecastday[0].hour.length,
+                            (index) => ForecastWidget(
+                              hour: _forecastModel!
+                                  .forecast
+                                  .forecastday[0]
+                                  .hour[index]
+                                  .time
+                                  .toString()
+                                  .substring(11, 16),
+                              temp: _forecastModel!
+                                  .forecast
+                                  .forecastday[0]
+                                  .hour[index]
+                                  .tempC
+                                  .toString(),
+                              isDay: _forecastModel!
+                                  .forecast
+                                  .forecastday[0]
+                                  .hour[index]
+                                  .isDay,
+                            ),
+                          ),
                         ),
                       ),
                     ],
