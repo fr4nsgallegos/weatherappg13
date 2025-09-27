@@ -85,17 +85,17 @@ class ApiServices {
     final url = Uri.parse(
       "http://api.weatherapi.com/v1/forecast.json?key=70866d7ade244a3c9ca20142230509&q=$lat,$long&days=1&aqi=no&alerts=no",
     );
-    logger.d("holaaaaaaa");
 
     try {
-      print("asdasdasd");
-
       final response = await http.get(url);
-      logger.i(response.body);
+      logger.d("Se obtuvo la respuesta: ${response.body}");
 
       if (response.statusCode == 200) {
+        logger.d("El status es 200");
         final data = json.decode(response.body);
+        logger.d("data decodificada: $data");
         ForecastModel forecastModel = ForecastModel.fromJson(data);
+        logger.d("Data en ForecastModel: $forecastModel");
         print(data);
         print(forecastModel);
         print(forecastModel.location.name);
