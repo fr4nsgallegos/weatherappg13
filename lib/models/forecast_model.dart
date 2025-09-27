@@ -43,7 +43,7 @@ class Current {
   double windMph;
   double windKph;
   int windDegree;
-  WindDir windDir;
+  String windDir;
   int pressureMb;
   double pressureIn;
   double precipMm;
@@ -120,7 +120,7 @@ class Current {
     windMph: json["wind_mph"]?.toDouble(),
     windKph: json["wind_kph"]?.toDouble(),
     windDegree: json["wind_degree"],
-    windDir: windDirValues.map[json["wind_dir"]]!,
+    windDir: json["wind_dir"],
     pressureMb: json["pressure_mb"],
     pressureIn: json["pressure_in"]?.toDouble(),
     precipMm: json["precip_mm"]?.toDouble(),
@@ -159,7 +159,7 @@ class Current {
     "wind_mph": windMph,
     "wind_kph": windKph,
     "wind_degree": windDegree,
-    "wind_dir": windDirValues.reverse[windDir],
+    "wind_dir": windDir,
     "pressure_mb": pressureMb,
     "pressure_in": pressureIn,
     "precip_mm": precipMm,
@@ -201,15 +201,6 @@ class Condition {
 
   Map<String, dynamic> toJson() => {"text": text, "icon": icon, "code": code};
 }
-
-enum WindDir { ESE, S, SE, SSE }
-
-final windDirValues = EnumValues({
-  "ESE": WindDir.ESE,
-  "S": WindDir.S,
-  "SE": WindDir.SE,
-  "SSE": WindDir.SSE,
-});
 
 class Forecast {
   List<Forecastday> forecastday;
