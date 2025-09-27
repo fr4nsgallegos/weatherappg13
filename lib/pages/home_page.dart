@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:weatherappg13/models/forecast_model.dart';
 import 'package:weatherappg13/models/user_model.dart';
 import 'package:weatherappg13/models/weather_model.dart';
 import 'package:weatherappg13/services/api_services.dart';
@@ -19,7 +20,8 @@ class _HomePageState extends State<HomePage> {
 
   final formKey = GlobalKey<FormState>();
 
-  WeatherModel? _weatherModel;
+  // WeatherModel? _weatherModel;
+  ForecastModel? _forecastModel;
 
   Future<Position?> getPosition() async {
     bool serviceEnabled;
@@ -58,14 +60,28 @@ class _HomePageState extends State<HomePage> {
     }
   }
 
-  Future<void> getWeatherFromPosition() async {
+  // Future<void> getWeatherFromPosition() async {
+  //   Position? _pos = await getPosition();
+  //   if (_pos == null) {
+  //     print("No se pudo obtener la ubicación");
+  //     return;
+  //   }
+
+  //   _weatherModel = await ApiServices().getWeatherInfoByPos(
+  //     _pos.latitude,
+  //     _pos.longitude,
+  //   );
+  //   setState(() {});
+  // }
+
+  Future<void> getForecastFromPosition() async {
     Position? _pos = await getPosition();
     if (_pos == null) {
       print("No se pudo obtener la ubicación");
       return;
     }
 
-    _weatherModel = await ApiServices().getWeatherInfoByPos(
+    _forecastModel = await ApiServices().getForecastInfoByPos(
       _pos.latitude,
       _pos.longitude,
     );
@@ -76,7 +92,8 @@ class _HomePageState extends State<HomePage> {
   void initState() {
     // TODO: implement initState
     super.initState();
-    getWeatherFromPosition();
+    // getWeatherFromPosition();
+    getForecastFromPosition();
   }
 
   @override
@@ -113,7 +130,7 @@ class _HomePageState extends State<HomePage> {
         ],
       ),
       backgroundColor: Color(0xff2C2F31),
-      body: _weatherModel == null
+      body: _forecastModel == null
           ? Center(child: CircularProgressIndicator())
           : Form(
               key: formKey,
@@ -127,8 +144,8 @@ class _HomePageState extends State<HomePage> {
                         function: () async {
                           if (formKey.currentState!.validate()) ;
                           {
-                            _weatherModel = await ApiServices()
-                                .getWeatherInfoByName(cityController.text);
+                            _forecastModel = await ApiServices()
+                                .getForecastInfoByName(cityController.text);
                             FocusScope.of(context).unfocus();
                             cityController.clear();
                             setState(() {});
@@ -145,7 +162,7 @@ class _HomePageState extends State<HomePage> {
                         child: Column(
                           children: [
                             Text(
-                              "${_weatherModel!.location.name}, ${_weatherModel!.location.country}",
+                              "${_forecastModel!.location.name}, ${_forecastModel!.location.country}",
                               style: TextStyle(
                                 color: Colors.white,
                                 fontSize: 18,
@@ -157,7 +174,7 @@ class _HomePageState extends State<HomePage> {
                               height: 100,
                             ),
                             Text(
-                              "${_weatherModel!.current.tempC}°",
+                              "${_forecastModel!.current.tempC}°",
                               style: TextStyle(
                                 color: Colors.white,
                                 fontSize: 100,
@@ -168,18 +185,18 @@ class _HomePageState extends State<HomePage> {
                               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                               children: [
                                 WeatherItem(
-                                  value: _weatherModel!.current.windKph,
+                                  value: _forecastModel!.current.windKph,
                                   unit: "km/h",
                                   image: "windspeed",
                                 ),
                                 WeatherItem(
-                                  value: _weatherModel!.current.humidity
+                                  value: _forecastModel!.current.humidity
                                       .toDouble(),
                                   unit: "%",
                                   image: "humidity",
                                 ),
                                 WeatherItem(
-                                  value: _weatherModel!.current.cloud
+                                  value: _forecastModel!.current.cloud
                                       .toDouble(),
                                   unit: "%",
                                   image: "cloud",
